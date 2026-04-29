@@ -96,10 +96,6 @@ The application uses the following APIs:
 * **Order API**: `https://example.com/api/orders`
 * **User API**: `https://example.com/api/users`
 
-👤 Author
-=======
-
-The E-commerce Website was developed by Nirmal Mahto.
 
 📝 License
 =======
