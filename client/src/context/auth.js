@@ -9,15 +9,27 @@ const AuthProvider = ({ children }) => {
     token: "",
   });
 
-  axios.defaults.headers.common["Authorization"] = auth?.token;
-
   useEffect(() => {
     const data = localStorage.getItem("auth");
     if (data) {
-      const parseData = JSON.parse(data);
-      setAuth(parseData);
+      try {
+        const parseData = JSON.parse(data);
+        // Ensure we only set the expected shape
+        if (parseData?.user || parseData?.token) setAuth(parseData);
+      } catch (err) {
+        console.log("Failed to parse auth from localStorage", err);
+      }
     }
   }, []);
+
+  // Keep axios default Authorization header in sync with auth.token
+  useEffect(() => {
+    if (auth?.token) {
+      axios.defaults.headers.common["Authorization"] = auth.token;
+    } else {
+      delete axios.defaults.headers.common["Authorization"];
+    }
+  }, [auth?.token]);
 
   return (
     <AuthContext.Provider value={[auth, setAuth]}>
